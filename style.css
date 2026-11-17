@@ -1,0 +1,246 @@
+/* =========================================
+   1. RÈGLES GÉNÉRALES
+========================================= */
+
+/* Appliquer box-sizing à tous les éléments */
+* {
+  box-sizing: border-box;
+}
+
+/* Style général de la page */
+body {
+  background-color: #f4f6f9;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+/* Titre principal */
+h1 {
+  color: #222;
+}
+
+/* =========================================
+   2. COULEURS DES TRANSACTIONS
+========================================= */
+
+/* Couleur des revenus */
+.revenu {
+  color: green;
+}
+
+/* Couleur des dépenses */
+.depense {
+  color: red;
+}
+
+/* =========================================
+   3. CARTE DU SOLDE
+========================================= */
+
+.carte-solde {
+  background-color: #2563eb;
+  color: white;
+  padding: 25px;
+  border-radius: 15px;
+  margin: 20px 0;
+}
+
+/* Texte descriptif du solde */
+.carte-solde p {
+  font-size: 14px;
+}
+
+/* Montant du solde */
+.carte-solde h2 {
+  font-size: 28px;
+}
+
+/* =========================================
+   4. RÉSUMÉ FINANCIER
+========================================= */
+
+/* Conteneur des cartes revenus et dépenses */
+.resume-financier {
+  display: flex;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+/* Style commun aux deux cartes */
+.carte-revenu,
+.carte-depense {
+  flex: 1;
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Couleur du montant des revenus */
+.carte-revenu h3 {
+  color: #16a34a;
+}
+
+/* Couleur du montant des dépenses */
+.carte-depense h3 {
+  color: #dc2626;
+}
+
+/* =========================================
+   5. FORMULAIRE D'AJOUT
+========================================= */
+
+/* Conteneur du formulaire */
+#formulaire {
+  display: flex;
+  gap: 10px;
+  background-color: white;
+  padding: 15px;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+
+/* Champs de saisie */
+input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin: 5px;
+}
+
+/* Champs à l'intérieur du formulaire */
+#formulaire input {
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #ddd;
+}
+
+/* Apparence d'un champ lorsqu'il est sélectionné */
+input:focus {
+  outline: 2px solid #2563eb;
+  border-color: #2563eb;
+}
+
+/* Effet de sélection des champs du formulaire */
+#formulaire input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* =========================================
+   6. BOUTONS
+========================================= */
+
+/* Apparence générale des boutons */
+button {
+  background-color: #2563eb;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Effet au survol des boutons */
+button:hover {
+  background-color: #1d4ed8;
+}
+
+/* Bouton Ajouter dans le formulaire */
+#formulaire button {
+  white-space: nowrap;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
+}
+
+/* Animation au survol du bouton Ajouter */
+#formulaire button:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+/* =========================================
+   7. LISTE DES TRANSACTIONS
+========================================= */
+
+/* Conteneur de la liste */
+#liste-transactions {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Chaque transaction */
+#liste-transactions li {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  padding: 15px;
+  margin-bottom: 10px;
+  background-color: white;
+  border-radius: 8px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* Centrer le montant */
+#liste-transactions li span:nth-child(2) {
+  text-align: center;
+}
+
+/* Placer le bouton à droite */
+#liste-transactions li button {
+  justify-self: end;
+}
+
+/* Animation au survol d'une transaction */
+#liste-transactions li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Mettre le montant en gras */
+#liste-transactions li span:last-child {
+  font-weight: bold;
+}
+
+/* =========================================
+   8. ADAPTATION AUX PETITS ÉCRANS
+========================================= */
+
+/* Ces règles s'appliquent lorsque l'écran
+   mesure au maximum 600 pixels */
+@media (max-width: 600px) {
+
+  #liste-transactions li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    padding: 12px 8px;
+  }
+
+  /* Description à gauche */
+  #liste-transactions li span:first-child {
+    text-align: left;
+    min-width: 0;
+  }
+
+  /* Montant exactement au centre */
+  #liste-transactions li span:nth-child(2) {
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  /* Bouton à droite */
+  #liste-transactions li button {
+    justify-self: end;
+    padding: 8px 10px;
+    white-space: nowrap;
+  }
+}
