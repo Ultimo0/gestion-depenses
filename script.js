@@ -30,6 +30,7 @@ const liste = document.querySelector("#liste-transactions");
 const formulaire = document.querySelector("#formulaire");
 const description = document.querySelector("#champ-description");
 const montant = document.querySelector("#champ-montant");
+const categorie = document.querySelector("#champ-categorie");
 
 // Modifier le titre
 titre.textContent = "Gestion de mes dépenses";
@@ -73,6 +74,7 @@ const afficherTransactions = () => {
     const element = document.createElement("li");
     const texteDescription = document.createElement("span");
     const texteMontant = document.createElement("span");
+    const texteCategorie = document.createElement("span");
     const boutonSupprimer = document.createElement("button");
 
     // Créer le bouton de suppression
@@ -104,10 +106,12 @@ const afficherTransactions = () => {
     texteDescription.textContent = transaction.description;
     texteMontant.textContent =
       transaction.montant.toLocaleString("fr-FR") + " FCFA";
+    texteCategorie.textContent = transaction.categorie || "Non catégorisée";
 
     // Ajouter les éléments à la liste HTML
     element.appendChild(texteDescription);
     element.appendChild(texteMontant);
+    element.appendChild(texteCategorie);
     element.appendChild(boutonSupprimer);
     liste.appendChild(element);
   }
@@ -150,6 +154,7 @@ formulaire.addEventListener("submit", (event) => {
   // Récupérer et convertir les valeurs des champs
   const montantConverti = Number(montant.value.trim());
   const valeurDescription = description.value.trim();
+  const valeurCategorie = categorie.value;
 
   // Vérifier que la description n'est pas vide
   if (valeurDescription === "") {
@@ -178,6 +183,7 @@ formulaire.addEventListener("submit", (event) => {
   transactions.push({
     description: valeurDescription,
     montant: montantConverti,
+    categorie: valeurCategorie,
   });
 
   // Actualiser les affichages
@@ -186,6 +192,7 @@ formulaire.addEventListener("submit", (event) => {
   // Vider les champs du formulaire
   description.value = "";
   montant.value = "";
+  categorie.value = "";
 });
 
 /* =========================================
