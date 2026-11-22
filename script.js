@@ -3,11 +3,7 @@
 ========================================= */
 
 // Tableau contenant toutes les transactions
-const transactions = [
-  { description: "Salaire", montant: 5000 },
-  { description: "Loyer", montant: -1500 },
-  { description: "commerce", montant: 1000 },
-];
+const transactions = [];
 
 /* =========================================
    2. RÉCUPÉRATION DES ÉLÉMENTS HTML
@@ -28,15 +24,44 @@ const liste = document.querySelector("#liste-transactions");
 
 // Formulaire
 const formulaire = document.querySelector("#formulaire");
+// Éléments de la fenêtre modale
+const modal = document.getElementById("modal-formulaire");
+const boutonOuvrir = document.getElementById("btn-ouvrir-formulaire");
+const boutonFermer = document.getElementById("btn-fermer-modal");
 const description = document.querySelector("#champ-description");
 const montant = document.querySelector("#champ-montant");
 const categorie = document.querySelector("#champ-categorie");
+const type = document.getElementById("champ-type");
+
+// Ouvrir la fenêtre
+boutonOuvrir.addEventListener("click", function () {
+  modal.classList.remove("modal-cachee");
+});
+
+// Fermer avec le bouton X
+boutonFermer.addEventListener("click", function () {
+  modal.classList.add("modal-cachee");
+});
+
+// Fermer en cliquant sur le fond sombre
+modal.addEventListener("click", function (event) {
+  if (event.target === modal) {
+    modal.classList.add("modal-cachee");
+  }
+});
+
+// Fermer avec la touche Échap
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Escape") {
+    modal.classList.add("modal-cachee");
+  }
+});
 
 // Modifier le titre
-titre.textContent = "Gestion de mes dépenses";
+titre.textContent = "Kashmo";
 
 /* =========================================
-   3. FONCTIONS DE CALCUL
+    FONCTIONS DE CALCUL
 ========================================= */
 
 // Calculer le solde total
@@ -60,8 +85,25 @@ const calculerDepenses = () => {
     .reduce((total, transaction) => total + Math.abs(transaction.montant), 0);
 };
 
+// Bibliothèque des icônes SVG de Kashmo
+const iconesCategories = {
+  Salaire: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 15h.01M17 9h.01M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/></svg>`,
+
+  Vente: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-6 9 6v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9Z"/><path d="M3 9h18M9 21v-7h6v7"/></svg>`,
+
+  Transport: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14l-1-8H6l-1 8Z"/><path d="m7 9 2-4h6l2 4M5 13h14"/><circle cx="8" cy="17" r="1.5"/><circle cx="16" cy="17" r="1.5"/></svg>`,
+
+  Nourriture: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v7a3 3 0 0 0 6 0V3M6 3v18M18 3v18M18 3c-3 3-3 7 0 9"/></svg>`,
+
+  Internet: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>`,
+
+  Loisirs: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12a4 4 0 0 1 4 4v5a2 2 0 0 1-3.2 1.6L15 16H9l-3.8 2.6A2 2 0 0 1 2 17v-5a4 4 0 0 1 4-4Z"/><path d="M8 11v4M6 13h4M16 12h.01M18 14h.01"/></svg>`,
+
+  Autres: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></svg>`,
+};
+
 /* =========================================
-   4. FONCTIONS D'AFFICHAGE
+   FONCTIONS D'AFFICHAGE
 ========================================= */
 
 // Afficher les transactions
@@ -72,10 +114,24 @@ const afficherTransactions = () => {
   // Parcourir les transactions avec leur index
   for (const [index, transaction] of transactions.entries()) {
     const element = document.createElement("li");
+    element.classList.add("transaction-item");
     const texteDescription = document.createElement("span");
     const texteMontant = document.createElement("span");
     const texteCategorie = document.createElement("span");
     const boutonSupprimer = document.createElement("button");
+    const informations = document.createElement("div");
+    const details = document.createElement("div");
+    const icone = document.createElement("div");
+
+    // Organiser les éléments de la transaction
+    informations.classList.add("transaction-informations");
+    details.classList.add("transaction-details");
+    icone.classList.add("transaction-icone");
+
+    texteDescription.classList.add("transaction-description");
+    texteCategorie.classList.add("transaction-categorie");
+    texteMontant.classList.add("transaction-montant");
+    boutonSupprimer.classList.add("transaction-supprimer");
 
     // Créer le bouton de suppression
     boutonSupprimer.textContent = "Supprimer";
@@ -95,24 +151,49 @@ const afficherTransactions = () => {
       }
     });
 
-    // Identifier les revenus et les dépenses
-    if (transaction.montant < 0) {
-      element.classList.add("depense");
-    } else {
+    // Identifier le type de transaction
+    if (transaction.type === "revenu") {
       element.classList.add("revenu");
+    } else {
+      element.classList.add("depense");
     }
 
     // Afficher la description et le montant
     texteDescription.textContent = transaction.description;
-    texteMontant.textContent =
-      transaction.montant.toLocaleString("fr-FR") + " FCFA";
+    const montantAbsolu = Math.abs(transaction.montant);
+
+    const signe = transaction.type === "revenu" ? "+" : "−";
+
+    texteMontant.textContent = `
+  ${signe}${montantAbsolu.toLocaleString("fr-FR")} FCFA`;
     texteCategorie.textContent = transaction.categorie || "Non catégorisée";
 
-    // Ajouter les éléments à la liste HTML
-    element.appendChild(texteDescription);
+    // Choisir l'icône selon la catégorie
+    icone.innerHTML =
+      iconesCategories[transaction.categorie] || iconesCategories.Autres;
+
+    const texteType = document.createElement("span");
+
+    texteType.textContent =
+      transaction.type === "revenu" ? "Revenu" : "Dépense";
+
+    texteType.classList.add("transaction-type");
+
+    // Organiser le type et la catégorie
+    details.appendChild(texteType);
+    details.appendChild(texteCategorie);
+
+    // Regrouper les informations
+    informations.appendChild(texteDescription);
+    informations.appendChild(details);
+
+    // Assembler la transaction
+    element.appendChild(icone);
+    element.appendChild(informations);
     element.appendChild(texteMontant);
-    element.appendChild(texteCategorie);
     element.appendChild(boutonSupprimer);
+
+    // Ajouter la transaction à la liste
     liste.appendChild(element);
   }
 };
@@ -144,7 +225,7 @@ const actualiserApplication = () => {
 };
 
 /* =========================================
-   5. GESTION DES ÉVÉNEMENTS
+   GESTION DES ÉVÉNEMENTS
 ========================================= */
 
 // Écouter le clic sur le bouton Ajouter
@@ -155,6 +236,7 @@ formulaire.addEventListener("submit", (event) => {
   const montantConverti = Number(montant.value.trim());
   const valeurDescription = description.value.trim();
   const valeurCategorie = categorie.value;
+  const valeurType = type.value;
 
   // Vérifier que la description n'est pas vide
   if (valeurDescription === "") {
@@ -179,10 +261,20 @@ formulaire.addEventListener("submit", (event) => {
     return;
   }
 
+  // Déterminer automatiquement le type de transaction
+  let montantFinal;
+
+  if (valeurType === "revenu") {
+    montantFinal = montantConverti;
+  } else {
+    montantFinal = -montantConverti;
+  }
+
   // Ajouter la nouvelle transaction au tableau
   transactions.push({
     description: valeurDescription,
-    montant: montantConverti,
+    montant: montantFinal,
+    type: valeurType,
     categorie: valeurCategorie,
   });
 
@@ -193,10 +285,11 @@ formulaire.addEventListener("submit", (event) => {
   description.value = "";
   montant.value = "";
   categorie.value = "";
+  type.value = "";
 });
 
 /* =========================================
-   6. INITIALISATION DE L'APPLICATION
+   INITIALISATION DE L'APPLICATION
 ========================================= */
 
 // Afficher les informations dès le démarrage

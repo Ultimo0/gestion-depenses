@@ -13,9 +13,124 @@
 
   <body>
     <!-- 1. En-tête de l'application -->
-    <header>
-      <h1>Mon portefeuille</h1>
-      <p>Gérez votre argent intelligemment.</p>
+    <header class="entete">
+      <div class="identite">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 64 64"
+          class="logo-icon"
+        >
+          <defs>
+            <linearGradient id="cuir" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#60A5FA" />
+              <stop offset="45%" stop-color="#1D4ED8" />
+              <stop offset="100%" stop-color="#172554" />
+            </linearGradient>
+
+            <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#FFFFFF" />
+              <stop offset="50%" stop-color="#93C5FD" />
+              <stop offset="100%" stop-color="#1E40AF" />
+            </linearGradient>
+
+            <filter id="ombre" x="-30%" y="-30%" width="160%" height="170%">
+              <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
+              <feOffset dy="2" />
+              <feComponentTransfer>
+                <feFuncA type="linear" slope="0.35" />
+              </feComponentTransfer>
+              <feMerge>
+                <feMergeNode />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          <!-- Carte bancaire -->
+          <rect
+            x="16"
+            y="5"
+            width="32"
+            height="21"
+            rx="4"
+            fill="#BFDBFE"
+            stroke="white"
+            stroke-width="1.5"
+          />
+          <rect x="21" y="11" width="8" height="6" rx="1" fill="#64748B" />
+          <path d="M33 12H43M33 17H40" stroke="#1E40AF" stroke-width="1.5" />
+
+          <!-- Corps en cuir -->
+          <g filter="url(#ombre)">
+            <rect
+              x="6"
+              y="20"
+              width="52"
+              height="37"
+              rx="7"
+              fill="url(#cuir)"
+              stroke="#BFDBFE"
+              stroke-width="1.5"
+            />
+
+            <!-- Poche avant -->
+            <path
+              d="M8 34H56V49C56 53 53 55 49 55H15C11 55 8 52 8 48Z"
+              fill="#1E40AF"
+              stroke="#93C5FD"
+              stroke-width="1"
+            />
+
+            <!-- Rabat -->
+            <path
+              d="M7 32C7 28 10 26 14 26H44C52 26 57 30 57 37V43H42C38 43 35 40 35 36C35 32 38 29 42 29H52"
+              fill="url(#cuir)"
+              stroke="#DBEAFE"
+              stroke-width="1.5"
+              stroke-linejoin="round"
+            />
+
+            <!-- Reflet du cuir -->
+            <path
+              d="M13 29H34"
+              stroke="#BFDBFE"
+              stroke-width="1"
+              stroke-linecap="round"
+              opacity="0.7"
+            />
+
+            <!-- Coutures -->
+            <path
+              d="M12 48V51H51V47"
+              stroke="#DBEAFE"
+              stroke-width="1"
+              stroke-dasharray="2 2"
+              fill="none"
+            />
+
+            <!-- Bouton métallique -->
+            <circle
+              cx="44"
+              cy="36"
+              r="5"
+              fill="url(#metal)"
+              stroke="white"
+              stroke-width="1"
+            />
+            <circle cx="44" cy="36" r="2" fill="#1E40AF" />
+            <path
+              d="M42 34L43 33"
+              stroke="white"
+              stroke-width="1"
+              stroke-linecap="round"
+            />
+          </g>
+        </svg>
+
+        <h1>Kashmo</h1>
+      </div>
+
+      <p>Gérez. Épargnez. Réussissez.</p>
     </header>
 
     <!-- Contenu principal -->
@@ -29,53 +144,130 @@
       <!-- 3. Résumé financier -->
       <section class="resume-financier">
         <div class="carte-revenu">
-          <p>Revenus</p>
+          <div class="entete-carte">
+            <p>Revenus</p>
+
+            <div class="icone-revenu">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M3 17L9 11L13 15L21 7"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M15 7H21V13"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+          </div>
+
           <h3 id="total-revenus">0 FCFA</h3>
         </div>
 
         <div class="carte-depense">
-          <p>Dépenses</p>
+          <div class="entete-carte">
+            <p>Dépenses</p>
+
+            <div class="icone-depense">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M3 7L9 13L13 9L21 17"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M15 17H21V11"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+          </div>
+
           <h3 id="total-depenses">0 FCFA</h3>
         </div>
       </section>
 
       <!-- 4. Formulaire d'ajout -->
       <section>
-        <form id="formulaire">
-          <label for="champ-description"> Description </label>
+        <!-- Bouton flottant pour ouvrir le formulaire -->
+        <button id="btn-ouvrir-formulaire" aria-label="Ajouter une transaction">
+          +
+        </button>
 
-          <input
-            type="text"
-            id="champ-description"
-            placeholder="Exemple : Salaire"
-            required
-          />
+        <!-- Fenêtre modale -->
+        <div id="modal-formulaire" class="modal-cachee">
+          <div class="contenu-modal">
+            <div class="entete-modal">
+              <h2>Nouvelle transaction</h2>
 
-          <label for="champ-montant"> Montant </label>
+              <button type="button" id="btn-fermer-modal" aria-label="Fermer">
+                &times;
+              </button>
+            </div>
 
-          <input
-            type="number"
-            id="champ-montant"
-            placeholder="Exemple : 5000"
-            aria-required=""
-            step="any"
-            required
-          />
+            <form id="formulaire">
+              <div class="champ-formulaire">
+                <label for="champ-type">Type de transaction</label>
 
-          <label for="champ-categorie"> Catégorie </label>
+                <select id="champ-type" required>
+                  <option value="">Choisir un type</option>
+                  <option value="revenu">Revenu</option>
+                  <option value="depense">Dépense</option>
+                </select>
+              </div>
 
-          <select id="champ-categorie" required>
-            <option value="">Choisir une catégorie</option>
-            <option value="Revenus">Revenus</option>
-            <option value="Transport">Transport</option>
-            <option value="Nourriture">Nourriture</option>
-            <option value="Internet">Internet</option>
-            <option value="Loisirs">Loisirs</option>
-            <option value="Autres">Autres</option>
-          </select>
+              <div class="champ-formulaire">
+                <label for="champ-description">Description</label>
+                <input
+                  type="text"
+                  id="champ-description"
+                  placeholder="Exemple : Salaire"
+                  required
+                />
+              </div>
 
-          <button type="submit" id="btn-ajouter">Ajouter</button>
-        </form>
+              <div class="champ-formulaire">
+                <label for="champ-montant">Montant</label>
+                <input
+                  type="number"
+                  id="champ-montant"
+                  placeholder="Exemple : 5000"
+                  step="any"
+                  required
+                />
+              </div>
+
+              <div class="champ-formulaire">
+                <label for="champ-categorie">Catégorie</label>
+                <select id="champ-categorie" required>
+                  <option value="">Choisir une catégorie</option>
+                  <option value="Salaire">Salaire</option>
+                  <option value="Vente">Vente</option>
+                  <option value="Transport">Transport</option>
+                  <option value="Nourriture">Nourriture</option>
+                  <option value="Internet">Internet</option>
+                  <option value="Loisirs">Loisirs</option>
+                  <option value="Autres">Autres</option>
+                </select>
+              </div>
+
+              <button type="submit" id="btn-ajouter">
+                Ajouter la transaction
+              </button>
+            </form>
+          </div>
+        </div>
       </section>
 
       <!-- 5. Historique des transactions -->
