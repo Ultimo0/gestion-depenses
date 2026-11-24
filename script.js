@@ -4,6 +4,48 @@
 
 // Tableau contenant toutes les transactions
 const transactions = [];
+let indexTransactionEnCours = null;
+
+// Devises disponibles dans Kashmo
+const devisesDisponibles = {
+  XAF: {
+    nom: "Franc CFA",
+    symbole: "FCFA",
+  },
+  EUR: {
+    nom: "Euro",
+    symbole: "€",
+  },
+  USD: {
+    nom: "Dollar américain",
+    symbole: "$",
+  },
+  GBP: {
+    nom: "Livre sterling",
+    symbole: "£",
+  },
+  CAD: {
+    nom: "Dollar canadien",
+    symbole: "$ CA",
+  },
+  CHF: {
+    nom: "Franc suisse",
+    symbole: "CHF",
+  },
+};
+
+// Devise utilisée par défaut
+let deviseActuelle = "XAF";
+
+// Récupérer le symbole de la devise actuelle
+const obtenirSymboleDevise = () => {
+  return devisesDisponibles[deviseActuelle].symbole;
+};
+
+// Formater un montant selon la devise actuelle
+const formaterMontant = (montant) => {
+  return `${montant.toLocaleString("fr-FR")} ${obtenirSymboleDevise()}`;
+};
 
 /* =========================================
    2. RÉCUPÉRATION DES ÉLÉMENTS HTML
@@ -32,6 +74,7 @@ const description = document.querySelector("#champ-description");
 const montant = document.querySelector("#champ-montant");
 const categorie = document.querySelector("#champ-categorie");
 const type = document.getElementById("champ-type");
+const selectDevise = document.getElementById("select-devise");
 
 // Ouvrir la fenêtre
 boutonOuvrir.addEventListener("click", function () {
@@ -55,6 +98,12 @@ document.addEventListener("keydown", function (event) {
   if (event.key === "Escape") {
     modal.classList.add("modal-cachee");
   }
+});
+
+//Changement de devise
+selectDevise.addEventListener("change", () => {
+  deviseActuelle = selectDevise.value;
+  actualiserApplication();
 });
 
 // Modifier le titre
@@ -102,6 +151,30 @@ const iconesCategories = {
   Autres: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></svg>`,
 };
 
+// Déterminer le jour d'une transaction
+const obtenirGroupeDate = (dateTransaction) => {
+  const aujourdHui = new Date();
+
+  const hier = new Date();
+  hier.setDate(aujourdHui.getDate() - 1);
+
+  const date = new Date(dateTransaction);
+
+  if (date.toDateString() === aujourdHui.toDateString()) {
+    return "Aujourd'hui";
+  }
+
+  if (date.toDateString() === hier.toDateString()) {
+    return "Hier";
+  }
+
+  return date.toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+};
+
 /* =========================================
    FONCTIONS D'AFFICHAGE
 ========================================= */
@@ -111,90 +184,187 @@ const afficherTransactions = () => {
   // Vider la liste avant de la reconstruire
   liste.innerHTML = "";
 
-  // Parcourir les transactions avec leur index
+  // Préparer les groupes de transactions
+  const groupes = new Map();
+
+  // Classer les transactions selon leur date
   for (const [index, transaction] of transactions.entries()) {
-    const element = document.createElement("li");
-    element.classList.add("transaction-item");
-    const texteDescription = document.createElement("span");
-    const texteMontant = document.createElement("span");
-    const texteCategorie = document.createElement("span");
-    const boutonSupprimer = document.createElement("button");
-    const informations = document.createElement("div");
-    const details = document.createElement("div");
-    const icone = document.createElement("div");
+    const groupeDate = obtenirGroupeDate(transaction.date);
 
-    // Organiser les éléments de la transaction
-    informations.classList.add("transaction-informations");
-    details.classList.add("transaction-details");
-    icone.classList.add("transaction-icone");
-
-    texteDescription.classList.add("transaction-description");
-    texteCategorie.classList.add("transaction-categorie");
-    texteMontant.classList.add("transaction-montant");
-    boutonSupprimer.classList.add("transaction-supprimer");
-
-    // Créer le bouton de suppression
-    boutonSupprimer.textContent = "Supprimer";
-
-    // Écouter le clic sur le bouton Supprimer
-    boutonSupprimer.addEventListener("click", () => {
-      const confirmation = confirm(
-        "Voulez-vous vraiment supprimer cette transaction ?",
-      );
-
-      if (confirmation) {
-        // Supprimer la transaction du tableau
-        transactions.splice(index, 1);
-
-        // Actualiser les affichages
-        actualiserApplication();
-      }
-    });
-
-    // Identifier le type de transaction
-    if (transaction.type === "revenu") {
-      element.classList.add("revenu");
-    } else {
-      element.classList.add("depense");
+    if (!groupes.has(groupeDate)) {
+      groupes.set(groupeDate, []);
     }
 
-    // Afficher la description et le montant
-    texteDescription.textContent = transaction.description;
-    const montantAbsolu = Math.abs(transaction.montant);
+    groupes.get(groupeDate).push({
+      transaction: transaction,
+      index: index,
+    });
+  }
 
-    const signe = transaction.type === "revenu" ? "+" : "−";
+  // Parcourir les transactions avec leur index
+  for (const [groupeDate, transactionsDuJour] of groupes) {
+    // Créer le conteneur du titre
+    const elementTitre = document.createElement("li");
 
-    texteMontant.textContent = `
-  ${signe}${montantAbsolu.toLocaleString("fr-FR")} FCFA`;
-    texteCategorie.textContent = transaction.categorie || "Non catégorisée";
+    // Créer le titre du groupe
+    const titreGroupe = document.createElement("h3");
 
-    // Choisir l'icône selon la catégorie
-    icone.innerHTML =
-      iconesCategories[transaction.categorie] || iconesCategories.Autres;
+    titreGroupe.textContent = groupeDate;
+    titreGroupe.classList.add("transaction-date-groupe");
 
-    const texteType = document.createElement("span");
+    // Organiser le titre
+    elementTitre.appendChild(titreGroupe);
+    liste.appendChild(elementTitre);
 
-    texteType.textContent =
-      transaction.type === "revenu" ? "Revenu" : "Dépense";
+    // Parcourir les transactions de ce groupe
+    for (const elementGroupe of transactionsDuJour) {
+      const transaction = elementGroupe.transaction;
+      const index = elementGroupe.index;
+      const element = document.createElement("li");
+      element.classList.add("transaction-item");
+      const texteDescription = document.createElement("span");
+      const texteMontant = document.createElement("span");
+      const texteCategorie = document.createElement("span");
+      const boutonSupprimer = document.createElement("button");
+      const boutonModifier = document.createElement("button");
+      const actions = document.createElement("div");
+      const informations = document.createElement("div");
+      const details = document.createElement("div");
+      const icone = document.createElement("div");
 
-    texteType.classList.add("transaction-type");
+      // Organiser les éléments de la transaction
+      informations.classList.add("transaction-informations");
+      details.classList.add("transaction-details");
+      icone.classList.add("transaction-icone");
 
-    // Organiser le type et la catégorie
-    details.appendChild(texteType);
-    details.appendChild(texteCategorie);
+      texteDescription.classList.add("transaction-description");
+      texteCategorie.classList.add("transaction-categorie");
+      texteMontant.classList.add("transaction-montant");
+      boutonSupprimer.classList.add("transaction-supprimer");
+      boutonModifier.classList.add("transaction-modifier");
+      actions.classList.add("transaction-actions");
 
-    // Regrouper les informations
-    informations.appendChild(texteDescription);
-    informations.appendChild(details);
+      // Créer le bouton de modification
+      boutonModifier.innerHTML = `
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M12 20h9"/>
+    <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z"/>
+  </svg>
+`;
 
-    // Assembler la transaction
-    element.appendChild(icone);
-    element.appendChild(informations);
-    element.appendChild(texteMontant);
-    element.appendChild(boutonSupprimer);
+      boutonModifier.setAttribute("aria-label", "Modifier la transaction");
+      boutonModifier.title = "Modifier";
 
-    // Ajouter la transaction à la liste
-    liste.appendChild(element);
+      // Créer le bouton de suppression
+      boutonSupprimer.innerHTML = `
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#e11d48"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M3 6h18"/>
+    <path d="M8 6V4h8v2"/>
+    <path d="M19 6l-1 14H6L5 6"/>
+    <path d="M10 11v5"/>
+    <path d="M14 11v5"/>
+  </svg>
+`;
+
+      boutonSupprimer.setAttribute("aria-label", "Supprimer la transaction");
+      boutonSupprimer.title = "Supprimer";
+
+      // Préparer la modification de la transaction
+      boutonModifier.addEventListener("click", () => {
+        indexTransactionEnCours = index;
+
+        // Remplir le formulaire avec les informations existantes
+        description.value = transaction.description;
+        montant.value = Math.abs(transaction.montant);
+        type.value = transaction.type;
+        categorie.value = transaction.categorie;
+
+        // Afficher le formulaire
+        modal.classList.remove("modal-cachee");
+      });
+
+      // Écouter le clic sur le bouton Supprimer
+      boutonSupprimer.addEventListener("click", () => {
+        const confirmation = confirm(
+          "Voulez-vous vraiment supprimer cette transaction ?",
+        );
+
+        if (confirmation) {
+          // Supprimer la transaction du tableau
+          transactions.splice(index, 1);
+
+          // Actualiser les affichages
+          actualiserApplication();
+        }
+      });
+
+      // Identifier le type de transaction
+      if (transaction.type === "revenu") {
+        element.classList.add("revenu");
+      } else {
+        element.classList.add("depense");
+      }
+
+      // Afficher la description et le montant
+      texteDescription.textContent = transaction.description;
+      const montantAbsolu = Math.abs(transaction.montant);
+
+      const signe = transaction.type === "revenu" ? "+" : "−";
+
+      texteMontant.textContent = `${signe}${formaterMontant(montantAbsolu)}`;
+      texteCategorie.textContent = transaction.categorie || "Non catégorisée";
+
+      // Choisir l'icône selon la catégorie
+      icone.innerHTML =
+        iconesCategories[transaction.categorie] || iconesCategories.Autres;
+
+      const texteType = document.createElement("span");
+
+      texteType.textContent =
+        transaction.type === "revenu" ? "Revenu" : "Dépense";
+
+      texteType.classList.add("transaction-type");
+
+      // Organiser le type et la catégorie
+      details.appendChild(texteType);
+      details.appendChild(texteCategorie);
+
+      // Regrouper les informations
+      informations.appendChild(texteDescription);
+      informations.appendChild(details);
+
+      // Assembler la transaction
+      element.appendChild(icone);
+      element.appendChild(informations);
+      element.appendChild(texteMontant);
+      actions.appendChild(boutonModifier);
+      actions.appendChild(boutonSupprimer);
+
+      element.appendChild(actions);
+
+      // Ajouter la transaction à la liste
+      liste.appendChild(element);
+    }
   }
 };
 
@@ -202,19 +372,16 @@ const afficherTransactions = () => {
 const afficherSolde = () => {
   const soldeTotal = calculerSolde();
 
-  elementSolde.textContent =
-    "Solde : " + soldeTotal.toLocaleString("fr-FR") + " FCFA";
+  elementSolde.textContent = "Solde : " + formaterMontant(soldeTotal);
 };
 
 // Afficher le résumé financier
 const afficherResumeFinancier = () => {
   // Afficher le total des revenus
-  elementRevenus.textContent =
-    calculerRevenus().toLocaleString("fr-FR") + " FCFA";
+  elementRevenus.textContent = formaterMontant(calculerRevenus());
 
   // Afficher le total des dépenses
-  elementDepenses.textContent =
-    calculerDepenses().toLocaleString("fr-FR") + " FCFA";
+  elementDepenses.textContent = formaterMontant(calculerDepenses());
 };
 
 // Actualiser tous les affichages
@@ -270,16 +437,28 @@ formulaire.addEventListener("submit", (event) => {
     montantFinal = -montantConverti;
   }
 
-  // Ajouter la nouvelle transaction au tableau
-  transactions.push({
-    description: valeurDescription,
-    montant: montantFinal,
-    type: valeurType,
-    categorie: valeurCategorie,
-  });
+  if (indexTransactionEnCours === null) {
+    // Ajouter une nouvelle transaction
+    transactions.push({
+      description: valeurDescription,
+      montant: montantFinal,
+      type: valeurType,
+      categorie: valeurCategorie,
+      date: new Date(),
+    });
+  } else {
+    // Modifier la transaction existante
+    const transaction = transactions[indexTransactionEnCours];
+
+    transaction.description = valeurDescription;
+    transaction.montant = montantFinal;
+    transaction.type = valeurType;
+    transaction.categorie = valeurCategorie;
+  }
 
   // Actualiser les affichages
   actualiserApplication();
+  indexTransactionEnCours = null;
 
   // Vider les champs du formulaire
   description.value = "";

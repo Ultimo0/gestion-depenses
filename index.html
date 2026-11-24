@@ -137,8 +137,56 @@
     <main>
       <!-- 2. Carte du solde -->
       <section class="carte-solde">
+        <div class="icone-solde">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <!-- Sommet noué de la bourse -->
+            <path d="M9 4.5c0 1.5 6 1.5 6 0" />
+            <path d="M9 4.5 8 3" />
+            <path d="m15 4.5 1-1" />
+
+            <!-- Corps de la bourse -->
+            <path
+              d="M9 6.5C7 8 5 10.5 5 15c0 4 3 6 7 6s7-2 7-6c0-4.5-2-7-4-8.5"
+            />
+
+            <!-- Nœud -->
+            <path d="M8 7.5c2.5 1.5 5.5 1.5 8 0" />
+
+            <!-- Pièce générique -->
+            <circle cx="12" cy="14" r="3" />
+            <path d="M12 12.5v3" />
+          </svg>
+        </div>
         <p>Solde disponible</p>
         <h2 id="solde"></h2>
+      </section>
+
+      <!-- Paramètres de l'application -->
+      <section class="section-parametres">
+        <h2>Paramètres</h2>
+
+        <div class="champ-formulaire">
+          <label for="select-devise">Devise principale</label>
+
+          <select id="select-devise">
+            <option value="XAF">Franc CFA (FCFA)</option>
+            <option value="EUR">Euro (€)</option>
+            <option value="USD">Dollar américain ($)</option>
+            <option value="GBP">Livre sterling (£)</option>
+            <option value="CAD">Dollar canadien ($ CA)</option>
+            <option value="CHF">Franc suisse (CHF)</option>
+          </select>
+        </div>
       </section>
 
       <!-- 3. Résumé financier -->
@@ -167,7 +215,7 @@
             </div>
           </div>
 
-          <h3 id="total-revenus">0 FCFA</h3>
+          <h3 id="total-revenus">0</h3>
         </div>
 
         <div class="carte-depense">
@@ -194,7 +242,7 @@
             </div>
           </div>
 
-          <h3 id="total-depenses">0 FCFA</h3>
+          <h3 id="total-depenses">0</h3>
         </div>
       </section>
 
