@@ -1,0 +1,135 @@
+/* =========================================
+   P5 ÉTAPE 7 — PAGE STATISTIQUES
+   SVG natifs. Identité Kashmo #2563eb. Responsive. Non-régression.
+========================================= */
+
+#view-statistiques .stat-cartes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 14px 0;
+}
+
+.stat-carte {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: 0 5px 18px rgba(15, 23, 42, 0.04);
+  min-width: 0;
+}
+
+.stat-carte-label {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.stat-carte-valeur {
+  color: #0f172a;
+  font-size: 18px;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-carte-solde {
+  background: linear-gradient(135deg, #2563eb 0%, #173b9b 55%, #0b1730 100%);
+  border-color: transparent;
+  color: #ffffff;
+}
+
+.stat-carte-solde .stat-carte-label { color: #dbeafe; }
+.stat-carte-solde .stat-carte-valeur { color: #ffffff; }
+
+.stat-carte-revenu .stat-carte-valeur { color: #16a34a; }
+.stat-carte-depense .stat-carte-valeur { color: #dc2626; }
+
+/* ---------- Filtres ---------- */
+.stat-filtres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0;
+}
+
+.stat-filtre {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+
+.stat-filtre:hover { color: #2563eb; border-color: #93c5fd; }
+
+.stat-filtre.actif {
+  background-color: rgba(37, 99, 235, 0.12);
+  border-color: #2563eb;
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.stat-filtre:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+
+/* ---------- Graphiques SVG ---------- */
+.stat-graphiques {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.stat-graphique {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 5px 18px rgba(15, 23, 42, 0.04);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.stat-graphique h3 {
+  margin: 0 0 10px;
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.stat-graphique-large { grid-column: 1 / -1; }
+
+.stat-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  font-family: Arial, sans-serif;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 480px) {
+  #view-statistiques .stat-cartes { grid-template-columns: 1fr; }
+  .stat-graphiques { grid-template-columns: 1fr; }
+  .stat-graphique-large { grid-column: 1; }
+  .stat-carte-valeur { font-size: 16px; }
+}
+
+@media (min-width: 768px) {
+  .stat-graphiques { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ---------- prefers-reduced-motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .stat-filtre { transition: none !important; }
+  #view-statistiques * { animation: none !important; }
+}

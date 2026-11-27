@@ -7,6 +7,8 @@ import {
   transactions,
   indexTransactionEnCours,
   definirIndexTransactionEnCours,
+  chargerTransactions,
+  sauvegarderTransactions,
 } from "./data/transactions.js";
 
 // Fonctions de calcul
@@ -28,6 +30,9 @@ import { afficherSolde, afficherResumeFinancier } from "./pages/dashboard.js";
 
 // Affichage des transactions
 import { afficherTransactions } from "./pages/transactions.js";
+
+// Page Statistiques (P5 ÉTAPE 7)
+import { afficherStatistiques } from "./pages/statistiques.js";
 
 // =========================================
 // RÉCUPÉRATION DES ÉLÉMENTS HTML
@@ -216,6 +221,18 @@ const actualiserApplication = () => {
       "#total-revenus / #total-depenses",
     );
   }
+
+  // 4. Actualiser la page Statistiques (P5 ÉTAPE 7). `#view-statistiques` conservée dans le DOM (hidden).
+  const elementStatistiques = document.getElementById("view-statistiques");
+
+  if (elementPresent(elementStatistiques)) {
+    afficherStatistiques(elementStatistiques, transactions, {
+      formaterMontant: formaterMontant,
+      calculerSolde: calculerSolde,
+    });
+  } else {
+    signalerElementManquant("view-statistiques", "#view-statistiques");
+  }
 };
 
 // =========================================
@@ -302,6 +319,8 @@ const gererSuppression = (index) => {
     // Ne pas conserver d'index de modification périmé après suppression
     definirIndexTransactionEnCours(null);
 
+    // Mutation -> sauvegarde -> actualisation (P5 ÉTAPE 6)
+    sauvegarderTransactions();
     actualiserApplication();
   }
 };
@@ -740,6 +759,9 @@ if (elementPresent(formulaire)) {
         categorie: valeurCategorie,
         date: new Date(),
       });
+
+      // Mutation -> sauvegarde -> actualisation (P5 ÉTAPE 6)
+      sauvegarderTransactions();
     } else {
       // Modifier la transaction existante
       const indexTransaction = indexTransactionEnCours;
@@ -758,8 +780,11 @@ if (elementPresent(formulaire)) {
         transaction.montant = montantFinal;
         transaction.type = valeurType;
         transaction.categorie = valeurCategorie;
+
+        // Mutation -> sauvegarde -> actualisation (P5 ÉTAPE 6)
+        sauvegarderTransactions();
       } else {
-        // Index périmé : revenir au mode ajout sans erreur
+        // Index périmé : revenir au mode ajout sans erreur (aucune sauvegarde)
         definirIndexTransactionEnCours(null);
       }
     }
@@ -886,6 +911,10 @@ for (const bouton of boutonsNavigation) {
 // =========================================
 // INITIALISATION DE L'APPLICATION
 // =========================================
+
+// P5 ÉTAPE 6 : restaurer les transactions persistées UNE SEULE FOIS,
+// AVANT le premier affichage. (localStorage lu ici, `transactions` rempli.)
+chargerTransactions();
 
 // Vue par défaut : Accueil + synchronisation visuelle/ARIA
 afficherVue("accueil");
