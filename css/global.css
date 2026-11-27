@@ -84,3 +84,336 @@ button:not([class]):hover {
   border-color: #2563eb;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
+
+/* =========================================
+   P5 ÉTAPE 1 — NAVIGATION À CINQ ONGLETS (structure)
+   Barre fixe en bas + espace réservé. (Aucun JS ajouté.)
+========================================= */
+
+/* Hauteur de la barre d'onglets (utilisée pour le dégagement en bas) */
+:root {
+  --onglets-hauteur: 72px;
+}
+
+/* Laisser de la place sous le contenu pour que la barre fixe ne masque rien */
+body {
+  padding-bottom: calc(var(--onglets-hauteur) + 20px);
+}
+
+/* Espace additionnel sur mobile (safe-area) */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  body {
+    padding-bottom: calc(var(--onglets-hauteur) + 20px + env(safe-area-inset-bottom));
+  }
+}
+
+/* Vues : contenu distinct par onglet, toujours présent dans le DOM */
+.vue {
+  /* pas de display forcé ici pour ne pas écraser [hidden] */
+}
+
+/* Une vue masquée reste dans le DOM mais n'est pas affichée */
+.vue[hidden] {
+  display: none;
+}
+
+/* Titre de vue */
+.titre-vue {
+  margin-top: 0;
+}
+
+/* Espace réservé (écrans à venir) */
+.espace-reserve {
+  color: #64748b;
+}
+
+/* -----------------------------------------
+   Barre de navigation fixe en bas
+----------------------------------------- */
+.onglets-fixes {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+
+  min-height: var(--onglets-hauteur);
+  padding: 6px 4px;
+  padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
+
+  background-color: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.08);
+}
+
+/* Boutons d'onglets */
+.onglets-fixes .onglet {
+  flex: 1 1 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+
+  min-width: 0;
+  padding: 8px 4px;
+
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  color: #64748b;
+
+  font-size: 12px;
+  line-height: 1.2;
+  cursor: pointer;
+
+  /* texte tronqué proprement si peu de place */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.onglets-fixes .onglet:hover {
+  color: #2563eb;
+  background-color: #f1f5f9;
+}
+
+.onglets-fixes .onglet:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* Onglet actif */
+.onglets-fixes .onglet[aria-current="page"] {
+  color: #2563eb;
+  font-weight: 700;
+}
+
+/* =========================================
+   P5 ÉTAPE 3 (reprise) — BARRE FLOTTANTE PREMIUM
+   Direction fintech. CSS privilégié. Aucune dépendance. Aucun emoji.
+========================================= */
+
+/* Variables de navigation */
+:root {
+  --onglets-hauteur: 78px;
+  --onglets-bas: 16px;
+  --onglets-accent: #2563eb;
+  --onglets-accent-clair: rgba(37, 99, 235, 0.12);
+  --onglets-fond: #ffffff;
+  --onglets-inactif: #64748b;
+  --onglets-radius: 22px;
+}
+
+/* Espace sous le contenu : barre flottante détachée + safe-area */
+body {
+  padding-bottom: calc(var(--onglets-hauteur) + var(--onglets-bas) + 20px + env(safe-area-inset-bottom, 0px));
+}
+
+/* -----------------------------------------
+   Barre flottante
+----------------------------------------- */
+.onglets-fixes {
+  /* détachée du bord inférieur + centrée */
+  position: fixed;
+  left: 50%;
+  right: auto;
+  bottom: calc(var(--onglets-bas) + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+
+  /* largeur équilibrée ; pas de débordement horizontal */
+  width: calc(100% - 24px);
+  max-width: 520px;
+  min-width: 0;
+
+  z-index: 100;
+
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  gap: 2px;
+
+  min-height: var(--onglets-hauteur);
+  padding: 8px 6px;
+  padding-bottom: 8px;
+
+  background: var(--onglets-fond);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: var(--onglets-radius);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.10), 0 2px 8px rgba(15, 23, 42, 0.06);
+
+  /* safe-areas */
+  padding-left: calc(6px + env(safe-area-inset-left, 0px));
+  padding-right: calc(6px + env(safe-area-inset-right, 0px));
+}
+
+/* -----------------------------------------
+   Onglets
+----------------------------------------- */
+.onglets-fixes .onglet {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 56px;
+  margin: 0;
+  padding: 8px 4px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  background: transparent;
+  border: none;
+  border-radius: calc(var(--onglets-radius) - 8px);
+  color: var(--onglets-inactif);
+
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    transform 120ms ease,
+    box-shadow 160ms ease;
+}
+
+/* Icône SVG */
+.onglets-fixes .onglet .onglet-icone {
+  width: 24px;
+  height: 24px;
+  display: block;
+  flex-shrink: 0;
+  transition: transform 160ms ease, color 160ms ease;
+}
+
+/* Libellé toujours visible + tronquage propre */
+.onglets-fixes .onglet .onglet-label {
+  display: block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+/* Inactif au survol */
+.onglets-fixes .onglet:hover {
+  color: var(--onglets-accent);
+  background-color: rgba(15, 23, 42, 0.04);
+}
+
+/* Appui tactile / clic */
+.onglets-fixes .onglet:active {
+  transform: scale(0.94);
+}
+
+/* Focus clavier */
+.onglets-fixes .onglet:focus-visible {
+  outline: 2px solid var(--onglets-accent);
+  outline-offset: 2px;
+  color: var(--onglets-accent);
+}
+
+/* Onglet actif : fond + indicateur distinctif */
+.onglets-fixes .onglet[aria-current="page"] {
+  color: var(--onglets-accent);
+  background-color: var(--onglets-accent-clair);
+  box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.15);
+}
+
+.onglets-fixes .onglet[aria-current="page"] .onglet-icone {
+  transform: translateY(-1px);
+  stroke-width: 2;
+}
+
+.onglets-fixes .onglet[aria-current="page"] .onglet-label {
+  font-weight: 800;
+}
+
+/* -----------------------------------------
+   Transition discrète entre vues
+----------------------------------------- */
+.vue:not([hidden]) {
+  animation: vue-entree-premium 200ms ease both;
+}
+
+@keyframes vue-entree-premium {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.vue[hidden] { display: none; }
+
+/* Titre de page lisible */
+.titre-vue {
+  margin-top: 0;
+  letter-spacing: -0.01em;
+}
+
+/* Espaces réservés : apparence soignée, sans fonctionnalité */
+.espace-reserve {
+  color: var(--onglets-inactif);
+  background: #ffffff;
+  border: 1px dashed rgba(15, 23, 42, 0.12);
+  border-radius: 16px;
+  padding: 18px;
+  text-align: center;
+}
+
+/* -----------------------------------------
+   Petit écran
+----------------------------------------- */
+@media (max-width: 480px) {
+  :root {
+    --onglets-hauteur: 74px;
+    --onglets-bas: 12px;
+    --onglets-radius: 18px;
+  }
+
+  .onglets-fixes {
+    width: calc(100% - 16px);
+    padding: 7px 5px;
+    gap: 0;
+  }
+
+  .onglets-fixes .onglet {
+    padding: 7px 2px;
+    font-size: 10px;
+    min-height: 54px;
+  }
+
+  .onglets-fixes .onglet .onglet-icone {
+    width: 23px;
+    height: 23px;
+  }
+
+  .onglets-fixes .onglet .onglet-label {
+    font-size: 10px;
+  }
+}
+
+/* -----------------------------------------
+   Respect prefers-reduced-motion
+----------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .onglets-fixes .onglet,
+  .onglets-fixes .onglet .onglet-icone,
+  .vue:not([hidden]) {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .onglets-fixes .onglet:active { transform: none; }
+  .onglets-fixes .onglet[aria-current="page"] .onglet-icone { transform: none; }
+}

@@ -5,7 +5,7 @@
 #btn-ouvrir-formulaire {
   position: fixed;
   right: 30px;
-  bottom: 30px;
+  bottom: calc(var(--onglets-hauteur, 78px) + var(--onglets-bas, 16px) + 22px);
   width: 60px;
   height: 60px;
   display: flex;
@@ -14,7 +14,23 @@
   border-radius: 50%;
   font-size: 30px;
   box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
-  z-index: 10;
+  z-index: 90;
+
+  /* P5 ÉTAPE 4 : déplacement libre (souris + tactile) */
+  touch-action: none;              /* on gère le glissement, pas le scroll */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: grab;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+/* Pendant le déplacement : aucune animation gênante, ne pas recouvrir le reste */
+#btn-ouvrir-formulaire.en-glissement {
+  cursor: grabbing;
+  transition: none !important;
+  animation: none !important;
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.4);
 }
 
 /* =========================================
@@ -29,7 +45,7 @@
   justify-content: center;
   padding: 20px;
   background: rgba(15, 23, 42, 0.55);
-  z-index: 100;
+  z-index: 1000;
 }
 
 /* Masquer la fenêtre */
@@ -90,4 +106,12 @@
   width: 100%;
   padding: 13px;
   margin-top: 8px;
+}
+
+/* Respect prefers-reduced-motion pour le bouton déplaçable */
+@media (prefers-reduced-motion: reduce) {
+  #btn-ouvrir-formulaire {
+    transition: none !important;
+    animation: none !important;
+  }
 }

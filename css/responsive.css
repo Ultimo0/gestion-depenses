@@ -7,7 +7,7 @@
   /* Bouton flottant et fenêtre modale */
   #btn-ouvrir-formulaire {
     right: 18px;
-    bottom: 18px;
+    bottom: calc(var(--onglets-hauteur, 78px) + var(--onglets-bas, 12px) + 18px);
   }
 
   .contenu-modal {
@@ -82,4 +82,196 @@
     width: 100%;
     min-width: 0;
   }
+}
+
+/* =========================================
+   P5 ÉTAPE 5 — HARMONISATION VISUELLE DES CINQ VUES
+   CSS uniquement. Palette Kashmo #2563eb. Non-régression P1-P4 + P5-É1..4.
+========================================= */
+
+/* ---------- Cadre commun des vues ---------- */
+.vue {
+  /* espacement régulier ; ne pas forcer display (ne pas casser [hidden]) */
+  margin-top: 4px;
+}
+
+.titre-vue {
+  color: #0b1730;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin: 0 0 16px;
+}
+
+/* Transition d'entrée : opacité seule (pas de `transform` qui casserait le bouton + fixe) */
+.vue:not([hidden]) {
+  animation: vue-entree-premium 200ms ease both;
+}
+
+/* ---------- ACCUEIL ---------- */
+/* Solde : légère harmonisation sans changer l'identité */
+.vue-accueil .carte-solde {
+  margin: 16px 0 20px;
+}
+
+.vue-accueil .carte-solde h2#solde {
+  font-size: clamp(26px, 7vw, 34px);
+  letter-spacing: -0.02em;
+}
+
+/* Paramètres : carte élégante cohérente */
+.vue-accueil .section-parametres {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 20px;
+  margin: 16px 0;
+  box-shadow: 0 5px 18px rgba(15, 23, 42, 0.04);
+}
+
+.vue-accueil .section-parametres h2 {
+  margin: 0 0 14px;
+  color: #0f172a;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.vue-accueil .section-parametres .champ-formulaire label {
+  color: #334155;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Résumé revenus / dépenses : harmonisation */
+.vue-accueil .resume-financier {
+  margin: 16px 0;
+  gap: 14px;
+}
+
+.vue-accueil .carte-revenu,
+.vue-accueil .carte-depense {
+  border-radius: 18px;
+  padding: 20px;
+}
+
+/* ---------- TRANSACTIONS ---------- */
+.vue-transactions .section-historique {
+  background: transparent;
+}
+
+.vue-transactions .section-historique > h2 {
+  color: #0b1730;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 18px 0 8px;
+}
+
+/* Historique : lisibilité + revenus/dépenses + dates/catégories/montants */
+.vue-transactions #liste-transactions {
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.vue-transactions .transaction-item {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 14px 16px;
+}
+
+.vue-transactions .transaction-date-groupe {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin: 18px 0 6px;
+}
+
+.vue-transactions .transaction-description {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.vue-transactions .transaction-details {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.vue-transactions .transaction-type {
+  font-weight: 600;
+}
+
+.vue-transactions .transaction-item.revenu .transaction-montant {
+  color: #16a34a;
+}
+
+.vue-transactions .transaction-item.depense .transaction-montant {
+  color: #dc2626;
+}
+
+.vue-transactions .transaction-item.revenu {
+  border-left: 3px solid rgba(22, 163, 74, 0.5);
+}
+
+.vue-transactions .transaction-item.depense {
+  border-left: 3px solid rgba(220, 38, 38, 0.5);
+}
+
+/* Boutons modifier / supprimer préservés + zones tactiles */
+.vue-transactions .transaction-modifier,
+.vue-transactions .transaction-supprimer {
+  min-width: 36px;
+  min-height: 36px;
+}
+
+/* ---------- STATISTIQUES / ÉPARGNE / PROFIL : espaces réservés soignés ---------- */
+.espace-reserve {
+  color: #64748b;
+  background: #ffffff;
+  border: 1px dashed rgba(15, 23, 42, 0.14);
+  border-radius: 18px;
+  padding: 28px 20px;
+  text-align: center;
+  margin: 16px 0;
+  box-shadow: 0 5px 18px rgba(15, 23, 42, 0.03);
+}
+
+/* Statistiques : place propre pour de futurs graphiques (non implémentés) */
+.vue-statistiques .espace-reserve {
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Épargne : emplacements visuels adaptés (non implémentés) */
+.vue-epargne .espace-reserve {
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Profil : présentation structurée pour futurs paramètres (non implémentés) */
+.vue-profil .espace-reserve {
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- Responsive harmonisation ---------- */
+@media (max-width: 480px) {
+  .titre-vue { font-size: 20px; }
+  .vue-accueil .section-parametres { padding: 16px; border-radius: 16px; }
+  .vue-accueil .resume-financier { flex-direction: column; gap: 12px; }
+  .vue-transactions .transaction-item { padding: 12px 14px; }
+  .espace-reserve { padding: 22px 16px; }
+}
+
+@media (min-width: 768px) {
+  .vue { max-width: 760px; margin-left: auto; margin-right: auto; }
+  .titre-vue { font-size: 24px; }
 }
