@@ -1,0 +1,86 @@
+/* =========================================
+   RÈGLES GÉNÉRALES
+========================================= */
+
+/* Appliquer box-sizing à tous les éléments */
+* {
+  box-sizing: border-box;
+}
+
+/* Style général de la page */
+body {
+  background-color: #f4f6f9;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+/* Titre principal */
+h1 {
+  color: #222;
+}
+
+/* =========================================
+   BOUTONS GÉNÉRAUX
+========================================= */
+
+/* Réinitialisation commune à tous les boutons */
+button {
+  border: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* Apparence générale des boutons */
+button:not([class]) {
+  background-color: #2563eb;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:not([class]):hover {
+  background-color: #1d4ed8;
+}
+
+/* =========================================
+   CHAMPS DE FORMULAIRE RÉUTILISABLES
+========================================= */
+
+/* Groupe de chaque champ */
+.champ-formulaire {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Étiquettes */
+.champ-formulaire label {
+  color: #334155;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Champs de saisie et sélection */
+.champ-formulaire input,
+.champ-formulaire select {
+  width: 100%;
+  padding: 13px 14px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font: inherit;
+  color: #0f172a;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Quand un champ est sélectionné */
+.champ-formulaire input:focus,
+.champ-formulaire select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}

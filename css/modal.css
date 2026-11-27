@@ -1,0 +1,93 @@
+/* =========================================
+   BOUTON FLOTTANT D'AJOUT
+========================================= */
+
+#btn-ouvrir-formulaire {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 30px;
+  box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+  z-index: 10;
+}
+
+/* =========================================
+   FENÊTRE MODALE
+========================================= */
+
+#modal-formulaire {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.55);
+  z-index: 100;
+}
+
+/* Masquer la fenêtre */
+.modal-cachee {
+  display: none !important;
+}
+
+/* Contenu de la fenêtre */
+.contenu-modal {
+  width: 100%;
+  max-width: 450px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 28px;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.2);
+}
+
+/* En-tête de la fenêtre */
+.entete-modal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.entete-modal h2 {
+  margin: 0;
+  color: #0f172a;
+}
+
+/* Bouton de fermeture */
+#btn-fermer-modal {
+  padding: 6px 10px;
+  background: transparent;
+  color: #64748b;
+  font-size: 24px;
+}
+
+#btn-fermer-modal:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+/* =========================================
+   FORMULAIRE DE TRANSACTION
+========================================= */
+
+#modal-formulaire #formulaire {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Bouton de validation */
+#modal-formulaire #formulaire button {
+  width: 100%;
+  padding: 13px;
+  margin-top: 8px;
+}

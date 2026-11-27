@@ -1,0 +1,151 @@
+/* =========================================
+   HISTORIQUE DES TRANSACTIONS
+========================================= */
+
+/* Liste des transactions */
+#liste-transactions {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Carte individuelle */
+.transaction-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.transaction-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(15, 23, 42, 0.06);
+}
+
+/* Icône de la transaction */
+.transaction-icone {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  border-radius: 12px;
+}
+
+.transaction-icone svg {
+  width: 23px;
+  height: 23px;
+}
+
+/* Couleurs des icônes */
+.transaction-item.revenu .transaction-icone {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.transaction-item.depense .transaction-icone {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* Informations de la transaction */
+.transaction-informations {
+  flex: 1;
+  min-width: 0;
+}
+
+.transaction-description {
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0 0 5px;
+}
+
+.transaction-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.transaction-type,
+.transaction-categorie {
+  margin: 0;
+}
+
+/* Montant */
+.transaction-montant {
+  font-weight: 700;
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+.transaction-item.revenu .transaction-montant {
+  color: #16a34a;
+}
+
+.transaction-item.depense .transaction-montant {
+  color: #dc2626;
+}
+
+/* Actions : modifier et supprimer */
+.transaction-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.transaction-supprimer,
+.transaction-modifier {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 8px;
+  background: transparent;
+}
+
+.transaction-supprimer svg,
+.transaction-modifier svg {
+  width: 18px;
+  height: 18px;
+}
+
+.transaction-supprimer {
+  color: #dc2626;
+}
+
+.transaction-supprimer:hover {
+  background: #fee2e2;
+}
+
+.transaction-modifier {
+  color: #2563eb;
+}
+
+.transaction-modifier:hover {
+  background: #dbeafe;
+}
+
+/* Titres des groupes de dates */
+.transaction-date-groupe {
+  margin: 24px 0 8px;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.transaction-date-groupe:first-child {
+  margin-top: 0;
+}

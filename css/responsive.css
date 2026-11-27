@@ -1,0 +1,85 @@
+/* =========================================
+   ADAPTATION AUX PETITS ÉCRANS
+========================================= */
+
+/* Écrans de 480px maximum */
+@media (max-width: 480px) {
+  /* Bouton flottant et fenêtre modale */
+  #btn-ouvrir-formulaire {
+    right: 18px;
+    bottom: 18px;
+  }
+
+  .contenu-modal {
+    padding: 20px;
+  }
+
+  /* Historique des transactions */
+  .transaction-item {
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .transaction-icone {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .transaction-montant {
+    font-size: 12px;
+  }
+
+  .transaction-supprimer,
+  .transaction-modifier {
+    padding: 6px;
+  }
+
+  /* Cartes financières */
+  .carte-revenu,
+  .carte-depense {
+    padding: 14px;
+  }
+
+  .entete-carte {
+    gap: 8px;
+  }
+
+  .entete-carte p {
+    margin: 0;
+    font-size: 13px;
+  }
+
+  .icone-revenu,
+  .icone-depense {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+  }
+
+  .carte-revenu h3,
+  .carte-depense h3 {
+    font-size: 18px;
+    white-space: nowrap;
+    letter-spacing: -0.5px;
+  }
+}
+
+/* Écrans de 600px maximum */
+@media (max-width: 600px) {
+  /* Formulaire en disposition verticale */
+  #formulaire {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    width: 100%;
+  }
+
+  #formulaire input,
+  #formulaire select,
+  #formulaire button {
+    width: 100%;
+    min-width: 0;
+  }
+}
